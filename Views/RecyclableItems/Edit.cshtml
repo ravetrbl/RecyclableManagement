@@ -1,0 +1,157 @@
+﻿@model RecyclingApp.Models.RecyclableItem
+@using RecyclingApp.Models
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="uk-card uk-card-default uk-card-hover uk-card-body uk-margin-top">
+    <h2 class="uk-card-title">Edit Recyclable Item</h2>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="uk-form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "uk-text-danger" })
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="uk-margin">
+                @Html.LabelFor(model => model.RecyclableTypeId, "Recyclable Type", htmlAttributes: new { @class = "uk-form-label" })
+                <div class="uk-form-controls">
+                    <select id="RecyclableTypeId" name="RecyclableTypeId" class="uk-select" onchange="onRecyclableTypeChange()">
+                        <option value="">Select Recyclable Type</option>
+                        @foreach (var item in ViewBag.RecyclableTypes as List<RecyclableType>)
+                        {
+                            <option value="@item.Id" data-minkg="@item.MinKg" data-maxkg="@item.MaxKg" @(item.Id == Model.RecyclableTypeId ? "selected" : "")>
+                                @item.Type
+                            </option>
+                        }
+                    </select>
+                    @Html.ValidationMessageFor(model => model.RecyclableTypeId, "", new { @class = "uk-text-danger" })
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                @Html.LabelFor(model => model.ItemDescription, "Item Description", htmlAttributes: new { @class = "uk-form-label" })
+                <div class="uk-form-controls">
+                    @Html.EditorFor(model => model.ItemDescription, new { htmlAttributes = new { @class = "uk-textarea" } })
+                    @Html.ValidationMessageFor(model => model.ItemDescription, "", new { @class = "uk-text-danger" })
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                @Html.LabelFor(model => model.Weight, "Weight (kg)", htmlAttributes: new { @class = "uk-form-label" })
+                <div class="uk-form-controls">
+                    @Html.EditorFor(model => model.Weight, new { htmlAttributes = new { @class = "uk-input", min = "0", type = "number" } })
+                    @Html.ValidationMessageFor(model => model.Weight, "", new { @class = "uk-text-danger" })
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                @Html.LabelFor(model => model.ComputedRate, "Computed Rate", htmlAttributes: new { @class = "uk-form-label" })
+                <div class="uk-form-controls">
+                    @Html.EditorFor(model => model.ComputedRate, new { htmlAttributes = new { @class = "uk-input" } })
+                    @Html.ValidationMessageFor(model => model.ComputedRate, "", new { @class = "uk-text-danger" })
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <div class="uk-text-danger uk-text">
+                    <span id="WeightWarning"></span>
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <div class="uk-form-controls uk-text-right">
+                    <button type="submit" class="uk-button uk-button-primary">
+                        <span uk-icon="icon: check"></span> SAVE
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="uk-margin">
+        <div class="uk-form-controls uk-text-left">
+            <a href="@Url.Action("Index")" class="uk-button uk-button-default">
+                <span uk-icon="icon: arrow-left"></span> Back to List
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("Weight").addEventListener("input", function () {
+            var weight = parseFloat(this.value || 0);
+            var rate = parseFloat(document.getElementById("RecyclableTypeId").value || 0);
+
+            if (weight > 0) {
+                var computedRate = (rate * weight).toFixed(2);
+                document.getElementById("ComputedRate").value = computedRate;
+            } else {
+                document.getElementById("ComputedRate").value = "";
+            }
+
+            if (weight > 0) {
+                validateWeight(weight);
+            } else {
+                document.getElementById("WeightWarning").textContent = "";
+            }
+        });
+
+        document.getElementById("RecyclableTypeId").addEventListener("change", function () {
+            var rate = parseFloat(this.value || 0);
+
+            var weight = parseFloat(document.getElementById("Weight").value || 0);
+
+            if (weight > 0) {
+                var computedRate = (rate * weight).toFixed(2);
+                document.getElementById("ComputedRate").value = computedRate;
+            }
+
+            if (weight > 0) {
+                validateWeight(weight);
+            } else {
+                document.getElementById("WeightWarning").textContent = "";
+            }
+        });
+
+        function validateWeight(weight) {
+            var selectedType = document.getElementById("RecyclableTypeId");
+            var selectedIndex = selectedType.selectedIndex;
+            var minKg = selectedType.options[selectedIndex].getAttribute("data-minkg");
+            var maxKg = selectedType.options[selectedIndex].getAttribute("data-maxkg");
+
+            minKg = parseFloat(minKg || 0);
+            maxKg = parseFloat(maxKg || 0);
+
+            if (weight < minKg || weight > maxKg) {
+                document.getElementById("WeightWarning").textContent = "● Warning: Weight must be between " + minKg + " kg and " + maxKg + " kg.";
+                document.getElementById("WeightWarning").style.color = "red";
+            } else {
+                document.getElementById("WeightWarning").textContent = "";
+                return true;
+            }
+        }
+
+        document.querySelector("form").addEventListener("submit", function (e) {
+            var weight = parseFloat(document.getElementById("Weight").value || 0);
+
+            if (weight > 0) {
+                if (!validateWeight(weight)) {
+                    e.preventDefault();
+                }
+            } else {
+                e.preventDefault();
+                document.getElementById("WeightWarning").textContent = "● Warning : Weight is required.";
+                document.getElementById("WeightWarning").style.color = "red";
+            }
+        });
+    });
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

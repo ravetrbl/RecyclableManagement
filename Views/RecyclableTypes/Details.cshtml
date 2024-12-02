@@ -1,0 +1,48 @@
+﻿@model RecyclingApp.Models.RecyclableType
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="uk-card uk-card-default uk-card-hover uk-card-body uk-margin-top">
+    <h3 class="uk-card-title">Recyclable Type Details</h3>
+
+    <div>
+        <hr />
+        <dl class="uk-description-list uk-description-list-divider">
+            <dt class="uk-text-bold">
+                Recyclable Type
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Type)
+            </dd>
+
+            <dt class="uk-text-bold">
+                @Html.DisplayNameFor(model => model.Rate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Rate)
+            </dd>
+
+            <dt class="uk-text-bold">
+                Minimum Weight
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.MinKg)
+            </dd>
+
+            <dt class="uk-text-bold">
+                Maximum Weight
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.MaxKg)
+            </dd>
+        </dl>
+    </div>
+
+    <div class="uk-flex uk-flex-between uk-margin-top">
+        <a href="@Url.Action("Index")" class="uk-button uk-button-default">
+            <span uk-icon="icon: arrow-left"></span> Back to List
+        </a>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+﻿@model IEnumerable<RecyclingApp.Models.RecyclableType>
+
+@{
+    ViewBag.Title = "Recyclable Types";
+}
+
+<div class="uk-card uk-card-default uk-card-hover uk-card-body uk-margin-top">
+    <div class="uk-flex uk-flex-between uk-margin-bottom">
+
+        <h2 class="uk-card-title uk-margin-remove-bottom" style="font-size: 2rem; font-weight: bold;">Recyclable Types</h2>
+
+        <div>
+            <a href="@Url.Action("Create")" class="uk-button uk-button-default" style="background-color: #28a745; border-color: none; color: white;">
+                <span uk-icon="icon: plus"></span> Add New Recyclable Type
+            </a>
+        </div>
+    </div>
+    <hr />
+
+    <table id="recyclableTypesTable" class="uk-table uk-table-divider uk-table-hover uk-margin-top">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Rate</th>
+                <th>Minimum Weight</th>
+                <th>Maximum Weight</th>
+                <th class="uk-text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Type</td>
+                    <td>@item.Rate</td>
+                    <td>@item.MinKg</td>
+                    <td>@item.MaxKg</td>
+                    <td class="uk-text-right">
+
+                        <a href="@Url.Action("Details", new { id = item.Id })" class="uk-button uk-button-default">
+                            <span uk-icon="icon: info"></span> View
+                        </a>
+
+                        <a href="@Url.Action("Edit", new { id = item.Id })" class="uk-button uk-button-primary">
+                            <span uk-icon="icon: pencil"></span> Edit
+                        </a>
+
+                        <a href="@Url.Action("Delete", new { id = item.Id })" class="uk-button uk-button-danger">
+                            <span uk-icon="icon: trash"></span> Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#recyclableTypesTable').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true
+            });
+        });
+    </script>
+}

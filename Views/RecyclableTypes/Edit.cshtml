@@ -1,0 +1,72 @@
+﻿@model RecyclingApp.Models.RecyclableType
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<div class="uk-card uk-card-default uk-card-hover uk-card-body uk-margin-top">
+    <h2 class="uk-card-title">Edit Recyclable Type</h2>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="uk-form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "uk-text-danger" })
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="uk-margin">
+                @Html.LabelFor(model => model.Type, "Recyclable Type", htmlAttributes: new { @class = "uk-form-label" })
+                <div class="uk-form-controls">
+                    @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @class = "uk-input" } })
+                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "uk-text-danger" })
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                @Html.LabelFor(model => model.Rate, htmlAttributes: new { @class = "uk-form-label" })
+                <div class="uk-form-controls">
+                    @Html.EditorFor(model => model.Rate, new { htmlAttributes = new { @class = "uk-input", type = "number", step = "0.01", min = "0" } })
+                    @Html.ValidationMessageFor(model => model.Rate, "", new { @class = "uk-text-danger" })
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                @Html.LabelFor(model => model.MinKg, "Minimum Weight", htmlAttributes: new { @class = "uk-form-label" })
+                <div class="uk-form-controls">
+                    @Html.EditorFor(model => model.MinKg, new { htmlAttributes = new { @class = "uk-input", type = "number", min = "0" } })
+                    @Html.ValidationMessageFor(model => model.MinKg, "", new { @class = "uk-text-danger" })
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                @Html.LabelFor(model => model.MaxKg, "Maximum Weight", htmlAttributes: new { @class = "uk-form-label" })
+                <div class="uk-form-controls">
+                    @Html.EditorFor(model => model.MaxKg, new { htmlAttributes = new { @class = "uk-input", type = "number", min = "0" } })
+                    @Html.ValidationMessageFor(model => model.MaxKg, "", new { @class = "uk-text-danger" })
+                </div>
+            </div>
+
+            <div class="uk-margin">
+                <div class="uk-form-controls uk-text-right">
+                    <button type="submit" class="uk-button uk-button-primary">
+                        <span uk-icon="icon: check"></span> SAVE
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="uk-margin">
+        <div class="uk-form-controls uk-text-left">
+            <a href="@Url.Action("Index")" class="uk-button uk-button-default">
+                <span uk-icon="icon: arrow-left"></span> Back to List
+            </a>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

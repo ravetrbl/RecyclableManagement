@@ -1,0 +1,60 @@
+﻿@model RecyclingApp.Models.RecyclableItem
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<div class="uk-card uk-card-default uk-card-hover uk-card-body uk-margin-top">
+    <h3>Are you sure you want to delete this?</h3>
+
+    <div>
+        <hr />
+        <dl class="uk-description-list uk-description-list-divider">
+            <dt class="uk-text-bold">
+                @Html.DisplayNameFor(model => model.Weight)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Weight)
+            </dd>
+
+            <dt class="uk-text-bold">
+                Computed Rate
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ComputedRate)
+            </dd>
+
+            <dt class="uk-text-bold">
+                Item Description
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ItemDescription)
+            </dd>
+
+            <dt class="uk-text-bold">
+                Recyclable Type
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.RecyclableType.Type)
+            </dd>
+        </dl>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="uk-text-right">
+            <button type="submit" class="uk-button uk-button-danger">
+                <span uk-icon="icon: trash"></span> Delete
+            </button>
+           
+        </div>
+        <div class="uk-text-left">
+            
+            <a href="@Url.Action("Index")" class="uk-button uk-button-default">
+                <span uk-icon="icon: arrow-left"></span> Back to List
+            </a>
+        </div>
+    }
+</div>
